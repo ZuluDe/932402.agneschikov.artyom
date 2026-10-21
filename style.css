@@ -39,12 +39,12 @@ header {
 header h1 {
     margin: 0 0 10px 0;
     font-size: 2.2em;
-
 }
 
-header h2 {
+header .header-subtitle {
     margin: 0;
     color: var(--sub-color);
+    font-size: 1.3em;
     font-weight: normal;
 }
 
@@ -57,6 +57,7 @@ footer {
 
 .main-nav {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 15px;
@@ -71,10 +72,16 @@ footer {
     background-color: var(--section-back);
     text-decoration: none;
     font-weight: bold;
-    padding: 10px 20px;
+    padding: 12px 15px;
     border-radius: 8px;
     border: 1px solid var(--border-color);
     transition: background-color 0.3s ease, transform 0.3s ease;
+    
+    width: 160px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .main-nav a:visited {
@@ -107,7 +114,7 @@ aside {
     height: fit-content;
 }
 
-section, #contact {
+section {
     background-color: var(--section-back);
     padding: 20px;
     margin-bottom: 20px;
@@ -174,7 +181,7 @@ section, #contact {
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 1;
-    flex-basis: calc(25% - 20px);
+    flex-basis: calc((100% - 60px) / 4);
     background-color: var(--alt-back);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -313,22 +320,11 @@ button[type="submit"]:focus {
     .release-card {
         flex-grow: 1;
         flex-shrink: 1;
-        flex-basis: calc(50% - 20px);
+        flex-basis: calc((100% - 20px) / 2);
     }
     
     .equipment {
         grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media screen and (max-width: 850px) {
-    .main-nav {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .main-nav a {
-        text-align: center;
     }
 }
 
