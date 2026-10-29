@@ -73,3 +73,106 @@ audios.forEach(a => {
         });
     });
 });
+
+
+const themeBtn = document.getElementById('theme-btn');
+const addBtn = document.getElementById('add-btn');
+const clearBtn = document.getElementById('clear-btn');
+const hideBtn = document.getElementById('hide-btn');
+const list = document.querySelector('.playlist-list');
+
+function savePlaylist() {
+    const items = document.querySelectorAll('.track-item');
+    const data = [];
+
+    for (let i = 0; i < items.length; i++) {
+        const text = items[i].querySelector('span').textContent;
+        const fav = items[i].querySelector('input').checked;
+        data.push({ text, fav });
+    }
+
+    localStorage.setItem('playlist', JSON.stringify(data));
+}
+
+function createTrack(text, isFav) {
+    if (!list) {
+        console.error('Элемент списка не найден');
+        return;
+    }
+
+    const li = document.createElement('li');
+    li.className = 'track-item';
+
+    const span = document.createElement('span');
+    span.textContent = text;
+
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = isFav;
+    checkbox.addEventListener('change', savePlaylist);
+
+    label.appendChild(checkbox);
+    label.append('Избранное');
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Удалить';
+    delBtn.addEventListener('click', () => {
+        li.remove();
+        savePlaylist();
+    });
+
+    li.appendChild(span);
+    li.appendChild(label);
+    li.appendChild(delBtn);
+
+    list.appendChild(li);
+}
+
+if (!themeBtn || !addBtn || !clearBtn || !hideBtn || !list) {
+    console.error('Ошибка: не все элементы найдены на странице');
+} else {
+    if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-theme');
+    }
+
+    const saved = JSON.parse(localStorage.getItem('playlist'));
+    if (saved) {
+        for (let i = 0; i < saved.length; i++) {
+            createTrack(saved[i].text, saved[i].fav);
+        }
+    }
+
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-theme');
+        const isLight = document.body.classList.contains('light-theme');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    addBtn.addEventListener('click', () => {
+        const title = prompt('Введите название трека:');
+        const time = prompt('Введите длительность (например, 2:30):');
+
+        if (title && time) {
+            createTrack(`${title.trim()} (${time.trim()})`, false);
+            savePlaylist();
+        }
+    });
+
+    clearBtn.addEventListener('click', () => {
+        const items = document.querySelectorAll('.track-item');
+        if (items.length === 0) {
+            alert('Плейлист уже пуст');
+            return;
+        }
+
+        for (let i = 0; i < items.length; i++) {
+            items[i].remove();
+        }
+        savePlaylist();
+    });
+
+    hideBtn.addEventListener('click', () => {
+        list.classList.toggle('hidden');
+    });
+}
